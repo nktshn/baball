@@ -15,7 +15,7 @@ class Drawer {
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.fillStyle = '#64c372';
             context.fillRect(0, 0, canvas.width, canvas.height);
-            // canvas.getCanvasObject().style.cursor = 'none'; //anti-cheat ;)
+            canvas.getCanvasObject().style.cursor = 'all-scroll';
             //objects:
             gameObjects.forEach(e => {
                 e.draw(canvas);

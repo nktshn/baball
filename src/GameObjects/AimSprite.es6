@@ -1,6 +1,6 @@
 import {GameObject} from './GameObject.es6';
 
-class AimSprite extends GameObject{
+class AimSprite extends GameObject {
     constructor(player) {
         let sprite = document.createElement('img');
         sprite.src = './build/images/aim.png';
@@ -21,37 +21,24 @@ class AimSprite extends GameObject{
             ctx.drawImage(this.sprite, this.drawX, this.drawY, this.width, this.height);
         };
         this.countPhysics = () => {
-            if (!(this.mouseY >= player.y)) {
-                let vx = this.mouseX - player.x;
-                let vy = this.mouseY - player.y;
-                let ratio = vx / vy;
-                let m1 = 1, m2 = Math.pow(ratio, 2); //multipliers
-                let mSum = m1 + m2;
-                let aSquared = Math.pow(this.radius, 2) / mSum;
-                let a = Math.sqrt(aSquared);
-                let b = a * ratio;
-                this.x = Math.floor(player.x + b);
-                this.y = Math.floor(player.y + a);
-                this.drawX = this.x - this.width/2;
-                this.drawY = this.y - this.height/2;
-            } else {
-                let vx = this.mouseX - player.x;
-                let vy = player.y - this.mouseY;
-                let ratio = vx / vy;
-                let m1 = 1, m2 = Math.pow(ratio, 2); //multipliers
-                let mSum = m1 + m2;
-                let aSquared = Math.pow(this.radius, 2) / mSum;
-                let a = Math.sqrt(aSquared);
-                let b = a * ratio;
-                this.x = Math.floor(player.x + b);
-                this.y = Math.floor(player.y - a);
-                this.drawX = this.x - this.width / 2;
-                this.drawY = this.y - this.height / 2;
-            }
+            let vx = this.mouseX - player.x;
+            let vy;
+            vy = !(this.mouseY >= player.y) ? this.mouseY - player.y : player.y - this.mouseY;
+            let ratio = vx / vy;
+            let m1 = 1, m2 = Math.pow(ratio, 2); //multipliers
+            let mSum = m1 + m2;
+            let aSquared = Math.pow(this.radius, 2) / mSum;
+            let a = Math.sqrt(aSquared);
+            let b = a * ratio;
+            this.x = Math.floor(player.x + b) - player.radius/2;
+            this.y = Math.floor(player.y + a) - player.radius/2;
+            this.y = !(this.mouseY >= player.y) ? Math.floor(player.y + a) : Math.floor(player.y - a);
+            this.drawX = this.x - (this.width / 2);
+            this.drawY = this.y - (this.height / 2);
         };
         document.addEventListener('mousemove', (e) => {
-            this.mouseX = e.clientX - this.width/2;
-            this.mouseY = e.clientY - this.height/2;
+            this.mouseX = e.clientX - this.width / 2;
+            this.mouseY = e.clientY - this.height / 2;
         });
 
     }
