@@ -42,29 +42,66 @@ class AimSprite extends GameObject {
             this.mouseX = e.clientX - this.width / 2;
             this.mouseY = e.clientY - this.height / 2;
         });
-        document.addEventListener('click', e => {
+        document.addEventListener('mouseup', e => {
             this.pushBall();
         });
 
         this.pushBall = () => {
             if (ball.isAttached) {
-                let power = 1;
+                let power = 3;
                 let vx = (this.x - player.x);
                 let vy = (this.y - player.y);
-                let ratio = vx >= vy ? vy/vx : vx/vy;
+                let ratio = vx >= vy ? vy / vx : vx / vy;
                 if (vx >= 0 && vy <= 0) { //right-top direction
-                    if (Math.abs(vx) >= Math.abs(vy)) {
+                    if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
                         ball.dx = power;
-                        ball.dy = power*ratio;
-                        //costyl'
-                        ball.x += 30;
-                        ball.y += 30;
-                    } else {
-                        ball.dx = -power/ratio;
+                        ball.dy = power * ratio;
+                        ball.x += ball.radius + player.radius;
+                        ball.y += (ball.radius + player.radius) * ratio;
+                    } else { //vx shorter
+                        ball.dx = -power / ratio;
                         ball.dy = -power;
-                        //costyl'
-                        ball.x += 30;
-                        ball.y += 30;
+                        ball.x -= (ball.radius + player.radius) / ratio;
+                        ball.y -= (ball.radius + player.radius);
+                    }
+                }
+                if (vx < 0 && vy < 0) { //left-top direction
+                    if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
+                        ball.dx = -power;
+                        ball.dy = -power / ratio;
+                        ball.x -= ball.radius + player.radius;
+                        ball.y -= (ball.radius + player.radius) / ratio;
+                    } else { //vx shorter
+                        ball.dx = -power / ratio;
+                        ball.dy = -power;
+                        ball.x -= (ball.radius + player.radius) / ratio;
+                        ball.y -= (ball.radius + player.radius);
+                    }
+                }
+                if (vx > 0 && vy > 0) { //right-down direction
+                    if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
+                        ball.dx = power;
+                        ball.dy = power * ratio;
+                        ball.x += ball.radius + player.radius;
+                        ball.y += (ball.radius + player.radius) * ratio;
+                    } else { //vx shorter
+                        ball.dx = power * ratio;
+                        ball.dy = power;
+                        ball.x += (ball.radius + player.radius) * ratio;
+                        ball.y += (ball.radius + player.radius);
+                    }
+                }
+                if (vx < 0 && vy > 0) { //left-down direction
+                    if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
+                        ball.dx = -power;
+                        ball.dy = -power / ratio;
+                        ball.x -= ball.radius + player.radius;
+                        ball.y -= (ball.radius + player.radius) / ratio;
+                    } else { //vx shorter
+                        ball.dx = power * ratio;
+                        ball.dy = power;
+                        ball.x += (ball.radius + player.radius) * ratio;
+                        ball.y += (ball.radius + player.radius);
                     }
                 }
 
