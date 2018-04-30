@@ -7,12 +7,13 @@ class Player extends GameObject{
         // console.log();
         this.x = 150;
         this.y = 150;
-        this.dx = 0.1;
-        this.dy = 0.1;
+        this.dx = 0.00001;
+        this.dy = 0.00001;
         this.height = 30;
         this.width = 30;
         this.radius = 20;
         this.speed = 0.4;
+        this.hasBall = false;
         this.draw = canvas => {
             let ctx = canvas.getContext();
             ctx.fillStyle = '#587bff';
@@ -22,7 +23,6 @@ class Player extends GameObject{
             ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
             ctx.fill();
             ctx.stroke();
-
         };
         this.countPhysics = () => {
             this.x += this.dx;

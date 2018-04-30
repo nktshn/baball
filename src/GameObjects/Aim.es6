@@ -1,7 +1,7 @@
 import {GameObject} from './GameObject.es6';
 
 class AimSprite extends GameObject {
-    constructor(player) {
+    constructor(player, ball) {
         let sprite = document.createElement('img');
         sprite.src = './build/images/aim.png';
         super();
@@ -18,7 +18,9 @@ class AimSprite extends GameObject {
 
         this.draw = canvas => {
             let ctx = canvas.getContext();
-            ctx.drawImage(this.sprite, this.drawX, this.drawY, this.width, this.height);
+            if (player.hasBall) {
+                ctx.drawImage(this.sprite, this.drawX, this.drawY, this.width, this.height);
+            }
         };
         this.countPhysics = () => {
             let vx = this.mouseX - player.x;
@@ -30,8 +32,8 @@ class AimSprite extends GameObject {
             let aSquared = Math.pow(this.radius, 2) / mSum;
             let a = Math.sqrt(aSquared);
             let b = a * ratio;
-            this.x = Math.floor(player.x + b) - player.radius/2;
-            this.y = Math.floor(player.y + a) - player.radius/2;
+            this.x = Math.floor(player.x + b) - player.radius / 2;
+            this.y = Math.floor(player.y + a) - player.radius / 2;
             this.y = !(this.mouseY >= player.y) ? Math.floor(player.y + a) : Math.floor(player.y - a);
             this.drawX = this.x - (this.width / 2);
             this.drawY = this.y - (this.height / 2);
@@ -40,7 +42,36 @@ class AimSprite extends GameObject {
             this.mouseX = e.clientX - this.width / 2;
             this.mouseY = e.clientY - this.height / 2;
         });
+        document.addEventListener('click', e => {
+            this.pushBall();
+        });
 
+        this.pushBall = () => {
+            if (ball.isAttached) {
+                let power = 1;
+                let vx = (this.x - player.x);
+                let vy = (this.y - player.y);
+                let ratio = vx >= vy ? vy/vx : vx/vy;
+                if (vx >= 0 && vy <= 0) { //right-top direction
+                    if (Math.abs(vx) >= Math.abs(vy)) {
+                        ball.dx = power;
+                        ball.dy = power*ratio;
+                        //costyl'
+                        ball.x += 30;
+                        ball.y += 30;
+                    } else {
+                        ball.dx = -power/ratio;
+                        ball.dy = -power;
+                        //costyl'
+                        ball.x += 30;
+                        ball.y += 30;
+                    }
+                }
+
+            }
+            ball.isAttached = false;
+            player.hasBall = false;
+        }
     }
 }
 
