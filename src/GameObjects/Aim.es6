@@ -15,11 +15,22 @@ class AimSprite extends GameObject {
         this.width = 50;
         this.height = 50;
         this.radius = 150; //from player
+        this.currentPower = 0.1; //ball pushing power
+        this.minPower = 0.1;
+        this.maxPower = 5;
+        this.isCountingPower = false;
+        this.currentDirection = true; //direction of powerbar (true means right, false - left)
 
         this.draw = canvas => {
             let ctx = canvas.getContext();
-            if (player.hasBall) {
+            if (player.hasBall) { //aim drawing
                 ctx.drawImage(this.sprite, this.drawX, this.drawY, this.width, this.height);
+            }
+            if (this.isCountingPower && player.hasBall) { //powerbar drawing
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
+                ctx.fillStyle = "rgba(150, 150, 150, 0.5)";
+                ctx.strokeRect(player.x - 50, player.y + 30, 100, 20);
+                ctx.fillRect(player.x - 50, player.y + 30, this.currentPower * 20, 20);
             }
         };
         this.countPhysics = () => {
@@ -37,6 +48,10 @@ class AimSprite extends GameObject {
             this.y = !(this.mouseY >= player.y) ? Math.floor(player.y + a) : Math.floor(player.y - a);
             this.drawX = this.x - (this.width / 2);
             this.drawY = this.y - (this.height / 2);
+
+            if (this.isCountingPower) {
+                this.countPower();
+            }
         };
         document.addEventListener('mousemove', (e) => {
             this.mouseX = e.clientX - this.width / 2;
@@ -44,62 +59,84 @@ class AimSprite extends GameObject {
         });
         document.addEventListener('mouseup', e => {
             this.pushBall();
+            this.isCountingPower = false;
         });
+        document.addEventListener('mousedown', e => {
+            this.drawPowerBar();
+        });
+
+        this.drawPowerBar = () => {
+            this.isCountingPower = true;
+        };
+
+        this.countPower = () => {
+            let dp = 0.02;
+            if (this.currentDirection) {
+                this.currentPower += dp;
+                if (this.currentPower >= this.maxPower) {
+                    this.currentDirection = false;
+                }
+            } else {
+                this.currentPower -= dp;
+                if (this.currentPower <= this.minPower) {
+                    this.currentDirection = true;
+                }
+            }
+        };
 
         this.pushBall = () => {
             if (ball.isAttached) {
-                let power = 3;
                 let vx = (this.x - player.x);
                 let vy = (this.y - player.y);
                 let ratio = vx >= vy ? vy / vx : vx / vy;
                 if (vx >= 0 && vy <= 0) { //right-top direction
                     if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
-                        ball.dx = power;
-                        ball.dy = power * ratio;
+                        ball.dx = this.currentPower;
+                        ball.dy = this.currentPower * ratio;
                         ball.x += ball.radius + player.radius;
                         ball.y += (ball.radius + player.radius) * ratio;
                     } else { //vx shorter
-                        ball.dx = -power / ratio;
-                        ball.dy = -power;
+                        ball.dx = -this.currentPower / ratio;
+                        ball.dy = -this.currentPower;
                         ball.x -= (ball.radius + player.radius) / ratio;
                         ball.y -= (ball.radius + player.radius);
                     }
                 }
                 if (vx < 0 && vy < 0) { //left-top direction
                     if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
-                        ball.dx = -power;
-                        ball.dy = -power / ratio;
+                        ball.dx = -this.currentPower;
+                        ball.dy = -this.currentPower / ratio;
                         ball.x -= ball.radius + player.radius;
                         ball.y -= (ball.radius + player.radius) / ratio;
                     } else { //vx shorter
-                        ball.dx = -power / ratio;
-                        ball.dy = -power;
+                        ball.dx = -this.currentPower / ratio;
+                        ball.dy = -this.currentPower;
                         ball.x -= (ball.radius + player.radius) / ratio;
                         ball.y -= (ball.radius + player.radius);
                     }
                 }
                 if (vx > 0 && vy > 0) { //right-down direction
                     if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
-                        ball.dx = power;
-                        ball.dy = power * ratio;
+                        ball.dx = this.currentPower;
+                        ball.dy = this.currentPower * ratio;
                         ball.x += ball.radius + player.radius;
                         ball.y += (ball.radius + player.radius) * ratio;
                     } else { //vx shorter
-                        ball.dx = power * ratio;
-                        ball.dy = power;
+                        ball.dx = this.currentPower * ratio;
+                        ball.dy = this.currentPower;
                         ball.x += (ball.radius + player.radius) * ratio;
                         ball.y += (ball.radius + player.radius);
                     }
                 }
                 if (vx < 0 && vy > 0) { //left-down direction
                     if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
-                        ball.dx = -power;
-                        ball.dy = -power / ratio;
+                        ball.dx = -this.currentPower;
+                        ball.dy = -this.currentPower / ratio;
                         ball.x -= ball.radius + player.radius;
                         ball.y -= (ball.radius + player.radius) / ratio;
                     } else { //vx shorter
-                        ball.dx = power * ratio;
-                        ball.dy = power;
+                        ball.dx = this.currentPower * ratio;
+                        ball.dy = this.currentPower;
                         ball.x += (ball.radius + player.radius) * ratio;
                         ball.y += (ball.radius + player.radius);
                     }
@@ -108,6 +145,7 @@ class AimSprite extends GameObject {
             }
             ball.isAttached = false;
             player.hasBall = false;
+            this.currentPower = this.minPower;
         }
     }
 }

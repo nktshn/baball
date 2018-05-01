@@ -41,27 +41,36 @@ class Ball extends GameObject {
                 }
                 // with border:
                 if ((e instanceof Border) && e.collisionLines) {
+                    let borderTouchMultiplier = 0.85;
                     if (this.y - this.radius <= e.collisionLines.top.y0 && this.x - this.radius >= e.collisionLines.top.x0
                         && this.x + this.radius < e.collisionLines.top.x1) { //top border
                         this.y++;
                         this.dy = -this.dy;
-
+                        this.dx *= borderTouchMultiplier;
+                        this.dy *= borderTouchMultiplier;
                     }
                     if (this.x - this.radius <= e.collisionLines.left.x0 && this.y - this.radius >= e.collisionLines.left.y0
                         && this.y + this.radius < e.collisionLines.left.y1) { //left border
                         this.x++;
                         this.dx = -this.dx;
+                        this.dx *= borderTouchMultiplier;
+                        this.dy *= borderTouchMultiplier;
                     }
                     if (this.y + this.radius >= e.collisionLines.bottom.y0 && this.x - this.radius >= e.collisionLines.bottom.x0
                         && this.x + this.radius < e.collisionLines.bottom.x1) { //bottom border
                         this.dy = -this.dy;
                         this.y--;
+                        this.dx *= borderTouchMultiplier;
+                        this.dy *= borderTouchMultiplier;
                     }
                     if (this.x + this.radius >= e.collisionLines.right.x0 && this.y + this.radius >= e.collisionLines.right.y0
                         && this.y + this.radius < e.collisionLines.right.y1) { //right border
                         this.dx = -this.dx;
                         this.x--;
+                        this.dx *= borderTouchMultiplier;
+                        this.dy *= borderTouchMultiplier;
                     }
+
                 }
             })
         };
