@@ -23,6 +23,7 @@ class Canvas {
         this.getCanvasObject = () => {
             return canvas;
         }
+
     }
 }
 

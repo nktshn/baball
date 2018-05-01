@@ -1,4 +1,6 @@
 import {GameObject} from './GameObject.es6';
+import {AudioBase} from '../Core/AudioBase.es6';
+import {img} from './../Sprites/aim.png';
 
 class AimSprite extends GameObject {
     constructor(player, ball) {
@@ -28,9 +30,9 @@ class AimSprite extends GameObject {
             }
             if (this.isCountingPower && player.hasBall) { //powerbar drawing
                 ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
-                ctx.fillStyle = "rgba(150, 150, 150, 0.5)";
-                ctx.strokeRect(player.x - 50, player.y + 30, 100, 20);
+                ctx.fillStyle = "rgba(212, 193, 3, 0.5)";
                 ctx.fillRect(player.x - 50, player.y + 30, this.currentPower * 20, 20);
+                ctx.strokeRect(player.x - 50, player.y + 30, 100, 20);
             }
         };
         this.countPhysics = () => {
@@ -70,7 +72,8 @@ class AimSprite extends GameObject {
         };
 
         this.countPower = () => {
-            let dp = 0.02;
+            console.log(this.currentPower);
+            let dp = 0.025;
             if (this.currentDirection) {
                 this.currentPower += dp;
                 if (this.currentPower >= this.maxPower) {
@@ -86,6 +89,7 @@ class AimSprite extends GameObject {
 
         this.pushBall = () => {
             if (ball.isAttached) {
+                AudioBase.playShoot();
                 let vx = (this.x - player.x);
                 let vy = (this.y - player.y);
                 let ratio = vx >= vy ? vy / vx : vx / vy;

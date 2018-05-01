@@ -26,6 +26,13 @@ module.exports = {
                 options: {
                     name: 'images/[name].[ext]'
                 }
+            },
+            {
+                test: /\.(mp3|ogg)$/,
+                loader: 'file-loader',
+                options: {
+                    name: 'audio/[name].[ext]'
+                }
             }
         ]
     }

@@ -1,6 +1,7 @@
 import {GameObject} from "./GameObject.es6";
 import {Player} from "./Player.es6";
 import {Border} from "./Border.es6";
+import {AudioBase} from "../Core/AudioBase.es6";
 
 class Ball extends GameObject {
     constructor() {
@@ -32,9 +33,12 @@ class Ball extends GameObject {
             objects.forEach(e => {
                 //with player:
                 if (e instanceof Player) {
-                    if (Math.abs(this.x - e.x) < e.radius && Math.abs(this.y - e.y) < e.radius) {
+                    if (Math.abs(this.x - e.x) < e.radius/2 && Math.abs(this.y - e.y) < e.radius/2) {
                         this.x = e.x;
                         this.y = e.y;
+                        if (!this.isAttached) {
+                            AudioBase.playCatching();
+                        }
                         this.isAttached = true;
                         e.hasBall = true;
                     }
@@ -48,6 +52,7 @@ class Ball extends GameObject {
                         this.dy = -this.dy;
                         this.dx *= borderTouchMultiplier;
                         this.dy *= borderTouchMultiplier;
+                        AudioBase.playBorderTouch();
                     }
                     if (this.x - this.radius <= e.collisionLines.left.x0 && this.y - this.radius >= e.collisionLines.left.y0
                         && this.y + this.radius < e.collisionLines.left.y1) { //left border
@@ -55,6 +60,7 @@ class Ball extends GameObject {
                         this.dx = -this.dx;
                         this.dx *= borderTouchMultiplier;
                         this.dy *= borderTouchMultiplier;
+                        AudioBase.playBorderTouch();
                     }
                     if (this.y + this.radius >= e.collisionLines.bottom.y0 && this.x - this.radius >= e.collisionLines.bottom.x0
                         && this.x + this.radius < e.collisionLines.bottom.x1) { //bottom border
@@ -62,6 +68,7 @@ class Ball extends GameObject {
                         this.y--;
                         this.dx *= borderTouchMultiplier;
                         this.dy *= borderTouchMultiplier;
+                        AudioBase.playBorderTouch();
                     }
                     if (this.x + this.radius >= e.collisionLines.right.x0 && this.y + this.radius >= e.collisionLines.right.y0
                         && this.y + this.radius < e.collisionLines.right.y1) { //right border
@@ -69,6 +76,7 @@ class Ball extends GameObject {
                         this.x--;
                         this.dx *= borderTouchMultiplier;
                         this.dy *= borderTouchMultiplier;
+                        AudioBase.playBorderTouch();
                     }
 
                 }

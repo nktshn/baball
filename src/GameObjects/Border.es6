@@ -1,4 +1,5 @@
 import {GameObject} from './GameObject.es6';
+import {AudioBase} from "../Core/AudioBase.es6";
 
 class Border extends GameObject{
     constructor(canvas) {
@@ -21,7 +22,8 @@ class Border extends GameObject{
             left: {x0: 0, x1: 0, y0: 0, y1: s.height},
             bottom: {x0: 0, x1: s.width, y0: s.height, y1: s.height},
             right: {x0: s.width, x1: s.width, y0: 0, y1: s.height},
-        }
+        };
+        AudioBase.playCrowd();
     }
 }
 
