@@ -14,9 +14,9 @@ class AimSprite extends GameObject {
         this.drawY = 110;
         this.mouseX = 150;
         this.mouseY = 150;
-        this.width = 50;
-        this.height = 50;
-        this.radius = 150; //from player
+        this.width = 20;
+        this.height = 20;
+        this.radius = 100; //from player
         this.currentPower = 0.1; //ball pushing power
         this.minPower = 0.1;
         this.maxPower = 1.5;

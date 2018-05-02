@@ -4,13 +4,13 @@ import {Border} from "./Border.es6";
 import {AudioBase} from "../Core/AudioBase.es6";
 
 class Ball extends GameObject {
-    constructor() {
+    constructor(canvas) {
         super();
-        this.x = 250;
-        this.y = 250;
+        this.x = canvas.width/2;
+        this.y = canvas.height/2;
         this.dx = 0.0001;
         this.dy = 0.0001;
-        this.radius = 10;
+        this.radius = 9;
         this.isAttached = false;
         this.draw = canvas => {
             let ctx = canvas.getContext();

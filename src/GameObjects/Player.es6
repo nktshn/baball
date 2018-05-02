@@ -1,17 +1,17 @@
 import {Physics} from '../Physics.es6';
 import {GameObject} from './GameObject.es6';
+import {FieldMarking} from "./FieldMarking.es6";
 
 class Player extends GameObject {
-    constructor() {
+    constructor(canvas) {
         super();
-        // console.log();
-        this.x = 150;
-        this.y = 150;
+        this.x = canvas.width / 2 - FieldMarking.centerCircleRadius;
+        this.y = canvas.height / 2;
         this.dx = 0.00001;
         this.dy = 0.00001;
         this.height = 30;
         this.width = 30;
-        this.radius = 15;
+        this.radius = 12;
         this.speed = 0.3;
         this.hasBall = false;
         this.isStopping = true;
@@ -30,7 +30,7 @@ class Player extends GameObject {
             ctx.fill();
             ctx.stroke();
             //nickname:
-            ctx.font = '16px calibri';
+            ctx.font = '16px Calibri';
             ctx.fillStyle = `rgba(255, 255, 255, 0.7)`;
             ctx.textAlign = 'center';
             ctx.fillText(this.nickname, this.x, this.y - 30);
