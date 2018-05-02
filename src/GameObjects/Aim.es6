@@ -19,7 +19,7 @@ class AimSprite extends GameObject {
         this.radius = 150; //from player
         this.currentPower = 0.1; //ball pushing power
         this.minPower = 0.1;
-        this.maxPower = 2;
+        this.maxPower = 1.5;
         this.isCountingPower = false;
         this.currentDirection = true; //direction of powerbar (true means right, false - left)
         this.isPowershot = false;
@@ -42,11 +42,12 @@ class AimSprite extends GameObject {
             //powershot msg:
             if (this.isPowershot) {
                 ctx.font = '24px calibri';
+                ctx.textAlign = 'center';
                 ctx.fillStyle = `rgba(251, 217, 80, ${alpha})`;
-                ctx.fillText('POWERSHOT!', player.x - 70, player.y + 50);
+                ctx.fillText('POWERSHOT!', player.x, player.y + 50);
                 ctx.strokeStyle = `rgba(134, 102, 8, ${alpha})`;
                 ctx.lineWidth = 3;
-                ctx.strokeText('POWERSHOT!', player.x - 70, player.y + 50);
+                ctx.strokeText('POWERSHOT!', player.x, player.y + 50);
                 alpha *= 0.975;
                 console.log(alpha);
                 if (alpha < 0.1) {

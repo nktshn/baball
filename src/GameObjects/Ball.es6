@@ -6,8 +6,8 @@ import {AudioBase} from "../Core/AudioBase.es6";
 class Ball extends GameObject {
     constructor() {
         super();
-        this.x = 350;
-        this.y = 350;
+        this.x = 250;
+        this.y = 250;
         this.dx = 0.0001;
         this.dy = 0.0001;
         this.radius = 10;

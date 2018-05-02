@@ -15,10 +15,12 @@ class Player extends GameObject {
         this.speed = 0.3;
         this.hasBall = false;
         this.isStopping = true;
+        this.nickname = 'Player 1';
 
         let breaksMultiplier = 0.99;
 
         this.draw = canvas => {
+            //player:
             let ctx = canvas.getContext();
             ctx.fillStyle = '#587bff';
             ctx.strokeStyle = '#273340';
@@ -27,6 +29,14 @@ class Player extends GameObject {
             ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
             ctx.fill();
             ctx.stroke();
+            //nickname:
+            ctx.font = '16px calibri';
+            ctx.fillStyle = `rgba(255, 255, 255, 0.7)`;
+            ctx.textAlign = 'center';
+            ctx.fillText(this.nickname, this.x, this.y - 30);
+            // ctx.strokeStyle = `rgba(11, 11, 11, 0.7)`;
+            // ctx.lineWidth = 2;
+            // ctx.strokeText(this.nickname, this.x, this.y - 30);
         };
         this.countPhysics = () => {
             this.x += this.dx;
