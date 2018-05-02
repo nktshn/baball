@@ -1,7 +1,7 @@
 import {Physics} from '../Physics.es6';
 import {GameObject} from './GameObject.es6';
 
-class Player extends GameObject{
+class Player extends GameObject {
     constructor() {
         super();
         // console.log();
@@ -11,9 +11,13 @@ class Player extends GameObject{
         this.dy = 0.00001;
         this.height = 30;
         this.width = 30;
-        this.radius = 20;
-        this.speed = 0.4;
+        this.radius = 15;
+        this.speed = 0.3;
         this.hasBall = false;
+        this.isStopping = true;
+
+        let breaksMultiplier = 0.99;
+
         this.draw = canvas => {
             let ctx = canvas.getContext();
             ctx.fillStyle = '#587bff';
@@ -27,6 +31,10 @@ class Player extends GameObject{
         this.countPhysics = () => {
             this.x += this.dx;
             this.y += this.dy;
+            if (this.isStopping) {
+                this.dy *= breaksMultiplier;
+                this.dx *= breaksMultiplier;
+            }
         };
 
         this.detectCollisions = objects => {
@@ -38,7 +46,6 @@ class Player extends GameObject{
                         && this.x + this.radius < e.collisionLines.top.x1) { //top border
                         this.y++;
                         this.dy = -this.dy;
-
                     }
                     if (this.x - this.radius <= e.collisionLines.left.x0 && this.y - this.radius >= e.collisionLines.left.y0
                         && this.y + this.radius < e.collisionLines.left.y1) { //left border
@@ -59,16 +66,7 @@ class Player extends GameObject{
             })
         };
 
-
         //controls:
-
-        //keyPress map
-        // let keyMap = {
-        //     115: false,
-        //     100: false,
-        //     97: false,
-        //     119: false
-        // };
 
         //keyDown map:
         let keyMap = {
@@ -79,59 +77,36 @@ class Player extends GameObject{
         };
 
         this.applyMovement = e => {
-            // console.log(e.keyCode);
-            //create interval for apply, clear interval in keyup
-            clearInterval(breakIntervalID);
+            this.isStopping = false;
             if (e.keyCode === 32) { //space
                 this.decreaseSpeed('x');
                 this.decreaseSpeed('y');
             }
             if (e.keyCode in keyMap) {
                 keyMap[e.keyCode] = true;
-                // if (keyMap[83] && keyMap[68]) { //down & right
-                //     this.dy = this.speed * 3 / Math.sqrt(2);
-                //     this.dx = this.speed * 3 / Math.sqrt(2);
-                //     return;
-                // }
-                // if (keyMap[83] && keyMap[65]) { //down & left
-                //     this.dy = this.speed * 3 / Math.sqrt(2);
-                //     this.dx = this.speed * -3 / Math.sqrt(2);
-                //     return;
-                // }
-                // if (keyMap[87] && keyMap[68]) { //up & right
-                //     this.dy = this.speed * -3 / Math.sqrt(2);
-                //     this.dx = this.speed * 3 / Math.sqrt(2);
-                //     return;
-                // }
-                // if (keyMap[87] && keyMap[65]) { //up & left
-                //     this.dy = this.speed * -3 / Math.sqrt(2);
-                //     this.dx = this.speed * -3 / Math.sqrt(2);
-                //     return;
-                // }
                 if (keyMap[83]) { //down
-                    this.dy = this.speed * 3;
+                    this.dy = this.speed * 2;
                     this.decreaseSpeed('x');
                     return;
                 }
                 if (keyMap[68]) { //right
-                    this.dx = this.speed * 3;
+                    this.dx = this.speed * 2;
                     this.decreaseSpeed('y');
                     return;
                 }
                 if (keyMap[65]) { //left
-                    this.dx = this.speed * -3;
+                    this.dx = this.speed * -2;
                     this.decreaseSpeed('y');
                     return;
                 }
                 if (keyMap[87]) { //up
-                    this.dy = this.speed * -3;
+                    this.dy = this.speed * -2;
                     this.decreaseSpeed('x');
                 }
 
             }
         };
 
-        let breakIntervalID;
 
         this.decreaseSpeed = mark => {
             let breaksMultiplier = 0.7;
@@ -156,31 +131,15 @@ class Player extends GameObject{
         };
 
         this.stopMovement = (e) => {
-            // console.log('stopping triggered');
-            clearInterval(breakIntervalID);
             for (let key in keyMap) {
                 if (keyMap.hasOwnProperty(key)) {
                     keyMap[key] = false;
                 }
             }
-            // smooth stopping:
-            breakIntervalID = setInterval(() => {
-                let breaksMultiplier = 0.9;
-                let minimalSpeed = 0.2;
-                this.dy *= breaksMultiplier;
-                this.dx *= breaksMultiplier;
-                if (Math.abs(this.dy) < minimalSpeed && Math.abs(this.dx) < minimalSpeed) {
-                    this.dy = 0;
-                    this.dx = 0;
-                    clearInterval(breakIntervalID);
-                    // console.log("CLEARED");
-                }
-            }, Physics.GAME_SPEED()*4);
+            this.isStopping = true;
         };
 
-        // e => {console.log(e.keyCode)}
         this.initController = () => {
-            // document.addEventListener('keypress', this.applyMovement);
             document.addEventListener('keydown', this.applyMovement);
             document.addEventListener('keyup', this.stopMovement);
         };

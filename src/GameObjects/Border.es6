@@ -5,11 +5,15 @@ class Border extends GameObject{
     constructor(canvas) {
         super();
         let s = canvas.getSizes();
+
+        this.offset = 30;
         this.draw = (canvas) => {
             let ctx = canvas.getContext();
             ctx.strokeStyle = '#292929';
             ctx.lineWidth = 5;
-            ctx.strokeRect(0, 0, s.width, s.height);
+            ctx.strokeRect(this.offset, this.offset, s.width - this.offset*2, s.height - this.offset*2);
+            ctx.fillStyle = '#7cc57a'; //field background color
+            ctx.fillRect(this.offset, this.offset, s.width - this.offset*2, s.height - this.offset*2);
         };
         this.countPhysics = () => {
 
@@ -18,12 +22,13 @@ class Border extends GameObject{
         this.detectCollisions = objects => {};
 
         this.collisionLines = {
-            top: {x0: 0, x1: s.width, y0: 0, y1: 0},
-            left: {x0: 0, x1: 0, y0: 0, y1: s.height},
-            bottom: {x0: 0, x1: s.width, y0: s.height, y1: s.height},
-            right: {x0: s.width, x1: s.width, y0: 0, y1: s.height},
+            top: {x0: this.offset, x1: s.width - this.offset, y0: this.offset, y1: 0},
+            left: {x0: this.offset, x1: this.offset, y0: this.offset, y1: s.height - this.offset},
+            bottom: {x0: this.offset, x1: s.width - this.offset, y0: s.height - this.offset, y1: s.height - this.offset},
+            right: {x0: s.width - this.offset, x1: s.width - this.offset, y0: this.offset, y1: s.height - this.offset},
         };
         AudioBase.playCrowd();
+        // AudioBase.playSoundtrack();
     }
 }
 

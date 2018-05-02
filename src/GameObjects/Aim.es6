@@ -19,9 +19,13 @@ class AimSprite extends GameObject {
         this.radius = 150; //from player
         this.currentPower = 0.1; //ball pushing power
         this.minPower = 0.1;
-        this.maxPower = 5;
+        this.maxPower = 2;
         this.isCountingPower = false;
         this.currentDirection = true; //direction of powerbar (true means right, false - left)
+        this.isPowershot = false;
+        this.powershotTreshold = 0.07;
+
+        let alpha = 0.9; //for text
 
         this.draw = canvas => {
             let ctx = canvas.getContext();
@@ -31,8 +35,24 @@ class AimSprite extends GameObject {
             if (this.isCountingPower && player.hasBall) { //powerbar drawing
                 ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
                 ctx.fillStyle = "rgba(212, 193, 3, 0.5)";
-                ctx.fillRect(player.x - 50, player.y + 30, this.currentPower * 20, 20);
-                ctx.strokeRect(player.x - 50, player.y + 30, 100, 20);
+                let widthMultiplier = 100 / this.maxPower;
+                ctx.fillRect(player.x - 50, player.y + 20, this.currentPower * widthMultiplier, 10);
+                ctx.strokeRect(player.x - 50, player.y + 20, 100, 10);
+            }
+            //powershot msg:
+            if (this.isPowershot) {
+                ctx.font = '24px calibri';
+                ctx.fillStyle = `rgba(251, 217, 80, ${alpha})`;
+                ctx.fillText('POWERSHOT!', player.x - 70, player.y + 50);
+                ctx.strokeStyle = `rgba(134, 102, 8, ${alpha})`;
+                ctx.lineWidth = 3;
+                ctx.strokeText('POWERSHOT!', player.x - 70, player.y + 50);
+                alpha *= 0.975;
+                console.log(alpha);
+                if (alpha < 0.1) {
+                    this.isPowershot = false;
+                    alpha = 0.9;
+                }
             }
         };
         this.countPhysics = () => {
@@ -72,8 +92,8 @@ class AimSprite extends GameObject {
         };
 
         this.countPower = () => {
-            console.log(this.currentPower);
-            let dp = 0.025;
+            // console.log(this.currentPower);
+            let dp = 0.025 / this.maxPower;
             if (this.currentDirection) {
                 this.currentPower += dp;
                 if (this.currentPower >= this.maxPower) {
@@ -87,12 +107,19 @@ class AimSprite extends GameObject {
             }
         };
 
+
         this.pushBall = () => {
             if (ball.isAttached) {
                 AudioBase.playShoot();
                 let vx = (this.x - player.x);
                 let vy = (this.y - player.y);
                 let ratio = vx >= vy ? vy / vx : vx / vy;
+                //powershot:
+                if (this.currentPower > this.maxPower - this.powershotTreshold) {
+                    this.currentPower *= 2;
+                    console.log('POWERSHOT!');
+                    this.isPowershot = true;
+                }
                 if (vx >= 0 && vy <= 0) { //right-top direction
                     if (Math.abs(vx) >= Math.abs(vy)) { //vx longer
                         ball.dx = this.currentPower;

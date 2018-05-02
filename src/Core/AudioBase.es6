@@ -2,6 +2,7 @@ import {s1} from './../Audio/shoot.mp3';
 import {s2} from './../Audio/catching.mp3';
 import {s3} from './../Audio/crowd.ogg';
 import {s4} from './../Audio/borderTouch.mp3';
+import {s5} from './../Audio/soundtrack.mp3';
 
 class AudioBase {
     static playShoot() {
@@ -34,6 +35,14 @@ class AudioBase {
         const borderTouch = new Audio('./build/audio/borderTouch.mp3');
         borderTouch.play();
     };
+
+    static playSoundtrack() {
+        const soundtrack = new Audio('./build/audio/soundtrack.mp3');
+        soundtrack.loop = true;
+        soundtrack.volume = 0.5;
+        soundtrack.play();
+    };
+
 }
 
 

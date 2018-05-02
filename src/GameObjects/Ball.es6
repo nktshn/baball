@@ -10,7 +10,7 @@ class Ball extends GameObject {
         this.y = 350;
         this.dx = 0.0001;
         this.dy = 0.0001;
-        this.radius = 15;
+        this.radius = 10;
         this.isAttached = false;
         this.draw = canvas => {
             let ctx = canvas.getContext();

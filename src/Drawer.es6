@@ -13,7 +13,7 @@ class Drawer {
             //main draw loop:
             //background:
             context.clearRect(0, 0, canvas.width, canvas.height);
-            context.fillStyle = '#64c372';
+            context.fillStyle = '#9dc089'; //canvas background
             context.fillRect(0, 0, canvas.width, canvas.height);
             canvas.getCanvasObject().style.cursor = 'all-scroll';
             //objects:

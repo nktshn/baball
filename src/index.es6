@@ -13,8 +13,8 @@ const player = new Player();
 const ball = new Ball();
 
 const gameObjects = [
-    player,
     new Border(canvas),
+    player,
     ball,
     new AimSprite(player, ball)
 ];
