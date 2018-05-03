@@ -76,7 +76,7 @@ class AimSprite extends GameObject {
                 this.countPower();
             }
         };
-        document.addEventListener('mousemove', (e) => {
+        document.getElementById('canvas').addEventListener('mousemove', (e) => {
             this.mouseX = e.clientX - this.width / 2;
             this.mouseY = e.clientY - this.height / 2;
         });
@@ -93,7 +93,6 @@ class AimSprite extends GameObject {
         };
 
         this.countPower = () => {
-            // console.log(this.currentPower);
             let dp = 0.025 / this.maxPower;
             if (this.currentDirection) {
                 this.currentPower += dp;
@@ -111,7 +110,6 @@ class AimSprite extends GameObject {
 
         this.pushBall = () => {
             if (ball.isAttached) {
-
                 let vx = (this.x - player.x);
                 let vy = (this.y - player.y);
                 let ratio = vx >= vy ? vy / vx : vx / vy;

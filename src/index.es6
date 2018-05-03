@@ -22,9 +22,10 @@ const staticGameObjects = [
     new Background(),
     new Field(topBorder),
     new FieldMarking(topBorder),
-    new Target(),
     new Border(canvas, 'bot'),
     topBorder,
+    new Target(topBorder, 'left'),
+    new Target(topBorder, 'right'),
 ];
 
 const dynamicGameObjects = [
@@ -36,7 +37,7 @@ const dynamicGameObjects = [
 const gameObjects = staticGameObjects.concat(dynamicGameObjects);
 
 const physics = new Physics(Physics.GAME_SPEED, gameObjects); //8.3 is time for 120 fps
-const drawer = new Drawer(60, canvas, dynamicGameObjects); //fps
+const drawer = new Drawer(canvas, dynamicGameObjects); //fps
 
 
 physics.run();

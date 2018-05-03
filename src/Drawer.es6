@@ -1,12 +1,13 @@
 class Drawer {
 
-    constructor(fps, canvas, gameObjects) {
-        let ms = 1000 / fps;
-        let loopID;
+    constructor(canvas, gameObjects) {
+        // let ms = 1000 / fps;
+        // let loopID;
         let context = canvas.getContext();
 
         this.run = () => {
-            loopID = setInterval(mainDrawLoop, ms);
+            requestAnimationFrame(mainDrawLoop);
+            // loopID = setInterval(mainDrawLoop, ms);
         };
 
         this.drawStaticBackground = (staticCanvas, staticGameObjects) => {
@@ -16,7 +17,6 @@ class Drawer {
         };
 
         function mainDrawLoop() {
-            // console.log("Draw loop");
             //main draw loop:
             //background:
             context.fillStyle = '#9dc089'; //canvas background
@@ -25,7 +25,8 @@ class Drawer {
             //objects:
             gameObjects.forEach(e => {
                 e.draw(canvas);
-            })
+            });
+            requestAnimationFrame(mainDrawLoop);
         }
     }
 }

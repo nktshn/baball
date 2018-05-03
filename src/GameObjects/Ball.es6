@@ -2,12 +2,13 @@ import {GameObject} from "./GameObject.es6";
 import {Player} from "./Player.es6";
 import {Border} from "./Border.es6";
 import {AudioBase} from "../Core/AudioBase.es6";
+import {Target} from './Target.es6';
 
 class Ball extends GameObject {
     constructor(canvas) {
         super();
-        this.x = canvas.width/2;
-        this.y = canvas.height/2;
+        this.x = canvas.width / 2;
+        this.y = canvas.height / 2;
         this.dx = 0.0001;
         this.dy = 0.0001;
         this.radius = 9;
@@ -18,7 +19,7 @@ class Ball extends GameObject {
             ctx.strokeStyle = '#343131';
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+            ctx.arc((this.x), (this.y), this.radius, 0, 2 * Math.PI);
             ctx.fill();
             ctx.stroke();
         };
@@ -33,7 +34,7 @@ class Ball extends GameObject {
             objects.forEach(e => {
                 //with player:
                 if (e instanceof Player) {
-                    if (Math.abs(this.x - e.x) < e.radius/2 && Math.abs(this.y - e.y) < e.radius/2) {
+                    if (Math.abs(this.x - e.x) < e.radius / 2 && Math.abs(this.y - e.y) < e.radius / 2) {
                         this.x = e.x;
                         this.y = e.y;
                         if (!this.isAttached) {
@@ -77,6 +78,21 @@ class Ball extends GameObject {
                         this.dx *= borderTouchMultiplier;
                         this.dy *= borderTouchMultiplier;
                         AudioBase.playBorderTouch();
+                    }
+
+                }
+                // with target:
+                if ((e instanceof Target) && e.collisionLines) {
+                    if ((this.y - this.radius <= e.collisionLines.top.y0 && this.x - this.radius >= e.collisionLines.top.x0
+                        && this.x + this.radius < e.collisionLines.top.x1) ||
+                        (this.x - this.radius <= e.collisionLines.left.x0 && this.y - this.radius >= e.collisionLines.left.y0
+                        && this.y + this.radius < e.collisionLines.left.y1) ||
+                        (this.y + this.radius >= e.collisionLines.bottom.y0 && this.x - this.radius >= e.collisionLines.bottom.x0
+                        && this.x + this.radius < e.collisionLines.bottom.x1) ||
+                        (this.x + this.radius >= e.collisionLines.right.x0 && this.y + this.radius >= e.collisionLines.right.y0
+                        && this.y + this.radius < e.collisionLines.right.y1)) {
+                        this.dx = 0;
+                        this.dy = 0;
                     }
 
                 }

@@ -5,9 +5,9 @@ class Canvas {
         let canvasWrapper = document.getElementById('canvasWrapper');
         canvas.width = 1270;
         canvas.height = 650;
-        canvasWrapper.style.width = '1200px';
-        canvasWrapper.style.height = '500px';
-        // canvasWrapper.style.margin = 'auto';
+        // canvasWrapper.style.width = '1200px';
+        // canvasWrapper.style.height = '500px';
+        canvasWrapper.style.margin = 'auto';
         canvas.style.border = '1px black solid';
         _c = canvas.getContext('2d', { alpha: false });
 

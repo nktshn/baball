@@ -2,6 +2,7 @@ import {Physics} from '../Physics.es6';
 import {GameObject} from './GameObject.es6';
 import {FieldMarking} from "./FieldMarking.es6";
 import {Border} from './Border.es6';
+import {Target} from './Target.es6';
 
 class Player extends GameObject {
     constructor(canvas) {
@@ -27,21 +28,21 @@ class Player extends GameObject {
             ctx.strokeStyle = '#273340';
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+            ctx.arc((this.x), (this.y), this.radius, 0, 2 * Math.PI);
             ctx.fill();
             ctx.stroke();
             //nickname:
             ctx.font = '16px Calibri';
-            ctx.fillStyle = `rgba(255, 255, 255, 0.7)`;
+            ctx.fillStyle = `rgba(40, 40, 40, 0.9)`;
             ctx.textAlign = 'center';
-            ctx.fillText(this.nickname, this.x, this.y - 30);
-            // ctx.strokeStyle = `rgba(11, 11, 11, 0.7)`;
-            // ctx.lineWidth = 2;
-            // ctx.strokeText(this.nickname, this.x, this.y - 30);
+            ctx.fillText(this.nickname, (this.x), (this.y) - 30);
+            ctx.strokeStyle = `rgba(40, 40, 40, 0.7)`;
+            ctx.lineWidth = 0.5;
+            ctx.strokeText(this.nickname, this.x, this.y - 30);
         };
         this.countPhysics = () => {
-            this.x += this.dx;
-            this.y += this.dy;
+            this.x += (this.dx);
+            this.y += (this.dy);
             if (this.isStopping) {
                 this.dy *= breaksMultiplier;
                 this.dx *= breaksMultiplier;
@@ -50,7 +51,7 @@ class Player extends GameObject {
 
         this.detectCollisions = objects => {
             objects.forEach(e => {
-                if ((e instanceof Border)) {
+                if ((e instanceof Border || e instanceof Target)) {
                     if (this.y - this.radius <= e.collisionLines.top.y0 && this.x - this.radius >= e.collisionLines.top.x0
                         && this.x + this.radius < e.collisionLines.top.x1) { //top border
                         this.y++;
