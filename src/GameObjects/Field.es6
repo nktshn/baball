@@ -12,6 +12,7 @@ class Field extends GameObject {
                 ctx.fillStyle = '#89cb87'; //default color
             }
             ctx.fillRect(borders.offset, borders.offset, s.width - borders.offset * 2, s.height - borders.offset * 2);
+            console.log('field drew');
         };
 
     }

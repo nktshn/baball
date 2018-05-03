@@ -111,15 +111,20 @@ class AimSprite extends GameObject {
 
         this.pushBall = () => {
             if (ball.isAttached) {
-                AudioBase.playShoot();
+
                 let vx = (this.x - player.x);
                 let vy = (this.y - player.y);
                 let ratio = vx >= vy ? vy / vx : vx / vy;
-                //powershot:
+                //powershot check:
                 if (this.currentPower > this.maxPower - this.powershotTreshold) {
                     this.currentPower *= 2;
-                    console.log('POWERSHOT!');
                     this.isPowershot = true;
+                }
+                //sounding:
+                if (this.isPowershot) {
+                    AudioBase.playPowershot();
+                } else {
+                    AudioBase.playShoot();
                 }
                 if (vx >= 0 && vy <= 0) { //right-top direction
                     if (Math.abs(vx) >= Math.abs(vy)) { //vx longer

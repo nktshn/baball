@@ -29,7 +29,7 @@ class Border extends GameObject {
                 ctx.moveTo(this.offset, s.height - this.offset);
                 ctx.lineTo(this.offset, this.getCollisionLines('bot').left.y0 + this.offset / 2); //left border
                 ctx.moveTo(s.width - this.offset, s.height - this.offset);
-                ctx.lineTo(s.width - this.offset, this.getCollisionLines('bot').right.y0 + this.offset / 2); //right border
+                ctx.lineTo(s.width - this.offset, this.getCollisionLines('bot').right.y0); //right border
                 ctx.stroke();
             }
         };
@@ -81,7 +81,7 @@ class Border extends GameObject {
                     right: {
                         x0: s.width - this.offset,
                         x1: s.width - this.offset,
-                        y0: 2 * ((s.height - this.offset) / 3),
+                        y0: 2 * ((s.height - this.offset) / 3) + this.offset/2,
                         y1: (s.height - this.offset)
                     },
                 };

@@ -1,6 +1,7 @@
 import {Physics} from '../Physics.es6';
 import {GameObject} from './GameObject.es6';
 import {FieldMarking} from "./FieldMarking.es6";
+import {Border} from './Border.es6';
 
 class Player extends GameObject {
     constructor(canvas) {
@@ -24,7 +25,7 @@ class Player extends GameObject {
             let ctx = canvas.getContext();
             ctx.fillStyle = '#587bff';
             ctx.strokeStyle = '#273340';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
             ctx.fill();
@@ -48,28 +49,26 @@ class Player extends GameObject {
         };
 
         this.detectCollisions = objects => {
-            //collision border: x;y x+2;y+2 x+2;y x;y+2
-            //o1.rightY == 02.leftY -> o1.rightCollision == true //if square
             objects.forEach(e => {
-                if (!(e instanceof Player) && e.collisionLines) {
+                if ((e instanceof Border)) {
                     if (this.y - this.radius <= e.collisionLines.top.y0 && this.x - this.radius >= e.collisionLines.top.x0
                         && this.x + this.radius < e.collisionLines.top.x1) { //top border
                         this.y++;
-                        this.dy = -this.dy;
+                        this.dy = 0;
                     }
                     if (this.x - this.radius <= e.collisionLines.left.x0 && this.y - this.radius >= e.collisionLines.left.y0
                         && this.y + this.radius < e.collisionLines.left.y1) { //left border
                         this.x++;
-                        this.dx = -this.dx;
+                        this.dx = 0;
                     }
                     if (this.y + this.radius >= e.collisionLines.bottom.y0 && this.x - this.radius >= e.collisionLines.bottom.x0
                         && this.x + this.radius < e.collisionLines.bottom.x1) { //bottom border
-                        this.dy = -this.dy;
+                        this.dy = 0;
                         this.y--;
                     }
                     if (this.x + this.radius >= e.collisionLines.right.x0 && this.y + this.radius >= e.collisionLines.right.y0
                         && this.y + this.radius < e.collisionLines.right.y1) { //right border
-                        this.dx = -this.dx;
+                        this.dx = 0;
                         this.x--;
                     }
                 }

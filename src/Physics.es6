@@ -2,7 +2,7 @@ class Physics {
     /**
      * @return {number}
      */
-    static GAME_SPEED() {return 16.6} ;
+    static GAME_SPEED() {return 8.3} ;
     constructor(ms, gameObjects) {
 
         let loopID;

@@ -9,7 +9,7 @@ class Canvas {
         canvasWrapper.style.height = '500px';
         // canvasWrapper.style.margin = 'auto';
         canvas.style.border = '1px black solid';
-        _c = canvas.getContext('2d');
+        _c = canvas.getContext('2d', { alpha: false });
 
         this.width = canvas.width;
         this.height = canvas.height;
