@@ -61,9 +61,9 @@ class Target extends GameObject {
                     return {
                         top: {
                             x0: posPoints.left.x1,
-                            y0: posPoints.left.y1,
+                            y0: posPoints.left.y1 + 5,
                             x1: posPoints.left.x0,
-                            y1: posPoints.left.y0
+                            y1: posPoints.left.y0 + 5
                         },
                         left: {
                             x0: posPoints.left.x1,

@@ -39,11 +39,10 @@ const gameObjects = staticGameObjects.concat(dynamicGameObjects);
 const physics = new Physics(Physics.GAME_SPEED, gameObjects); //8.3 is time for 120 fps
 const drawer = new Drawer(canvas, dynamicGameObjects); //fps
 
-
 physics.run();
 drawer.run();
 drawer.drawStaticBackground(backgroundCanvas, staticGameObjects);
-AudioBase.playCrowd();
+
 
 
 // new MouseHelper(canvas.getCanvasObject()); //displays coordinates of mouse

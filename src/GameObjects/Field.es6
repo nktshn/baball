@@ -1,4 +1,5 @@
 import {GameObject} from './GameObject.es6';
+import {AudioBase} from "../Core/AudioBase.es6";
 
 class Field extends GameObject {
     constructor(borders) {
@@ -13,7 +14,7 @@ class Field extends GameObject {
             }
             ctx.fillRect(borders.offset, borders.offset, s.width - borders.offset * 2, s.height - borders.offset * 2);
         };
-
+        AudioBase.playCrowd();
     }
 }
 

@@ -14,12 +14,19 @@ class Player extends GameObject {
         this.height = 30;
         this.width = 30;
         this.radius = 12;
-        this.speed = 0.3;
+        this.speed = 0.4;
         this.hasBall = false;
         this.isStopping = true;
         this.nickname = 'Player 1';
 
-        let breaksMultiplier = 0.99;
+        let breaksMultiplier = 0.9;
+
+        this.isAnyPressed = () => {
+            for (let i in keyMap) {
+                if (keyMap[i] === true) return true
+            }
+            return false;
+        };
 
         this.draw = canvas => {
             //player:
@@ -41,12 +48,57 @@ class Player extends GameObject {
             ctx.strokeText(this.nickname, this.x, this.y - 30);
         };
         this.countPhysics = () => {
-            this.x += (this.dx);
-            this.y += (this.dy);
-            if (this.isStopping) {
+            if (!this.isAnyPressed()) {
                 this.dy *= breaksMultiplier;
                 this.dx *= breaksMultiplier;
             }
+
+            if (keyMap[83]) { //down
+                this.dy = this.speed;
+                this.dx *= breaksMultiplier;
+            }
+            if (keyMap[87]) { //up
+                this.dy = -this.speed;
+                this.dx *= breaksMultiplier;
+            }
+
+            if (keyMap[68]) { //right
+                this.dx = this.speed;
+                this.dy *= breaksMultiplier;
+            }
+
+            if (keyMap[65]) { //left
+                this.dx = -this.speed;
+                this.dy *= breaksMultiplier;
+            }
+
+            if (keyMap[65] && keyMap[87]) { //left & up
+                this.dx = -this.speed / Math.sqrt(2);
+                this.dy = -this.speed / Math.sqrt(2);
+            }
+
+            if (keyMap[65] && keyMap[83]) { //left & down
+                this.dx = -this.speed / Math.sqrt(2);
+                this.dy = this.speed / Math.sqrt(2);
+            }
+
+            if (keyMap[68] && keyMap[87]) { //right & up
+                this.dx = this.speed / Math.sqrt(2);
+                this.dy = -this.speed / Math.sqrt(2);
+            }
+
+            if (keyMap[68] && keyMap[83]) { //right & down
+                this.dx = this.speed / Math.sqrt(2);
+                this.dy = this.speed / Math.sqrt(2);
+            }
+
+
+            this.x += (this.dx);
+            this.y += (this.dy);
+            // if (this.isStopping) {
+            //     this.dy *= breaksMultiplier;
+            //     this.dx *= breaksMultiplier;
+            // }
         };
 
         this.detectCollisions = objects => {
@@ -83,70 +135,74 @@ class Player extends GameObject {
             83: false, //down
             68: false, //right
             65: false, //left
-            87: false  //up
+            87: false,  //up
         };
+
 
         this.applyMovement = e => {
-            this.isStopping = false;
+            // this.isStopping = false;
             if (e.keyCode === 32) { //space
-                this.decreaseSpeed('x');
-                this.decreaseSpeed('y');
+                for (let i of keyMap) {
+                    keyMap[i] = false;
+                }
             }
             if (e.keyCode in keyMap) {
-                keyMap[e.keyCode] = true;
-                if (keyMap[83]) { //down
-                    this.dy = this.speed * 2;
-                    this.decreaseSpeed('x');
-                    return;
+                if (e.keyCode === 83) { //down
+                    keyMap[e.keyCode] = true;
                 }
-                if (keyMap[68]) { //right
-                    this.dx = this.speed * 2;
-                    this.decreaseSpeed('y');
-                    return;
+                if (e.keyCode === 68) { //right
+                    keyMap[e.keyCode] = true;
                 }
-                if (keyMap[65]) { //left
-                    this.dx = this.speed * -2;
-                    this.decreaseSpeed('y');
-                    return;
+                if (e.keyCode === 65) { //left
+                    keyMap[e.keyCode] = true;
                 }
-                if (keyMap[87]) { //up
-                    this.dy = this.speed * -2;
-                    this.decreaseSpeed('x');
+                if (e.keyCode === 87) { //up
+                    keyMap[e.keyCode] = true;
                 }
 
             }
         };
 
 
-        this.decreaseSpeed = mark => {
-            let breaksMultiplier = 0.7;
-            if (mark === 'x') {
-                let intervalID = setInterval(() => {
-                    this.dx *= breaksMultiplier;
-                    if (Math.abs(this.dx) < 0.1) {
-                        this.dx = 0;
-                        clearInterval(intervalID);
-                    }
-                }, Physics.GAME_SPEED());
-            }
-            if (mark === 'y') {
-                let intervalID = setInterval(() => {
-                    this.dy *= breaksMultiplier;
-                    if (Math.abs(this.dy) < 0.1) {
-                        this.dy = 0;
-                        clearInterval(intervalID);
-                    }
-                }, Physics.GAME_SPEED());
-            }
-        };
+        // this.decreaseSpeed = mark => {
+        //     let breaksMultiplier = 0.7;
+        //     if (mark === 'x') {
+        //         let intervalID = setInterval(() => {
+        //             this.dx *= breaksMultiplier;
+        //             if (Math.abs(this.dx) < 0.1) {
+        //                 this.dx = 0;
+        //                 clearInterval(intervalID);
+        //             }
+        //         }, Physics.GAME_SPEED());
+        //     }
+        //     if (mark === 'y') {
+        //         let intervalID = setInterval(() => {
+        //             this.dy *= breaksMultiplier;
+        //             if (Math.abs(this.dy) < 0.1) {
+        //                 this.dy = 0;
+        //                 clearInterval(intervalID);
+        //             }
+        //         }, Physics.GAME_SPEED());
+        //     }
+        // };
 
         this.stopMovement = (e) => {
-            for (let key in keyMap) {
-                if (keyMap.hasOwnProperty(key)) {
-                    keyMap[key] = false;
+            if (e.keyCode in keyMap) {
+                if (e.keyCode === 83) { //down
+                    keyMap[e.keyCode] = false;
                 }
+                if (e.keyCode === 68) { //right
+                    keyMap[e.keyCode] = false;
+                }
+                if (e.keyCode === 65) { //left
+                    keyMap[e.keyCode] = false;
+                }
+                if (e.keyCode === 87) { //up
+                    keyMap[e.keyCode] = false;
+                }
+
             }
-            this.isStopping = true;
+            // this.isStopping = true;
         };
 
         this.initController = () => {
