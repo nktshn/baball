@@ -49,7 +49,6 @@ class AimSprite extends GameObject {
                 ctx.lineWidth = 3;
                 ctx.strokeText('POWERSHOT!', player.x, player.y + 50);
                 alpha *= 0.975;
-                console.log(alpha);
                 if (alpha < 0.1) {
                     this.isPowershot = false;
                     alpha = 0.9;

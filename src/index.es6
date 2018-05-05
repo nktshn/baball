@@ -6,17 +6,19 @@ import {MouseHelper} from "./Core/MouseHelper.es6";
 import {Border} from "./GameObjects/Border.es6";
 import {AimSprite} from "./GameObjects/Aim.es6";
 import {Ball} from "./GameObjects/Ball.es6";
-import {AudioBase} from "./Core/AudioBase.es6";
 import {Field} from "./GameObjects/Field.es6";
 import {FieldMarking} from "./GameObjects/FieldMarking.es6";
 import {Target} from "./GameObjects/Target.es6";
 import {Background} from "./GameObjects/Background.es6";
+import {Match} from './Core/Match.es6';
 
 const canvas = new Canvas('canvas');
 const backgroundCanvas = new Canvas('backgroundCanvas');
 const player = new Player(canvas);
 const ball = new Ball(canvas);
 const topBorder = new Border(canvas, 'top');
+const leftTarget = new Target(topBorder, 'left');
+const rightTarget = new Target(topBorder, 'right');
 
 const staticGameObjects = [
     new Background(),
@@ -24,11 +26,12 @@ const staticGameObjects = [
     new FieldMarking(topBorder),
     new Border(canvas, 'bot'),
     topBorder,
-    new Target(topBorder, 'left'),
-    new Target(topBorder, 'right'),
+    leftTarget,
+    rightTarget
 ];
 
 const dynamicGameObjects = [
+    new Match([player], ball, [leftTarget, rightTarget], canvas),
     player,
     ball,
     new AimSprite(player, ball)

@@ -95,10 +95,7 @@ class Player extends GameObject {
 
             this.x += (this.dx);
             this.y += (this.dy);
-            // if (this.isStopping) {
-            //     this.dy *= breaksMultiplier;
-            //     this.dx *= breaksMultiplier;
-            // }
+
         };
 
         this.detectCollisions = objects => {
@@ -140,12 +137,8 @@ class Player extends GameObject {
 
 
         this.applyMovement = e => {
-            // this.isStopping = false;
-            if (e.keyCode === 32) { //space
-                for (let i of keyMap) {
-                    keyMap[i] = false;
-                }
-            }
+
+            //normal movement:
             if (e.keyCode in keyMap) {
                 if (e.keyCode === 83) { //down
                     keyMap[e.keyCode] = true;
@@ -164,45 +157,8 @@ class Player extends GameObject {
         };
 
 
-        // this.decreaseSpeed = mark => {
-        //     let breaksMultiplier = 0.7;
-        //     if (mark === 'x') {
-        //         let intervalID = setInterval(() => {
-        //             this.dx *= breaksMultiplier;
-        //             if (Math.abs(this.dx) < 0.1) {
-        //                 this.dx = 0;
-        //                 clearInterval(intervalID);
-        //             }
-        //         }, Physics.GAME_SPEED());
-        //     }
-        //     if (mark === 'y') {
-        //         let intervalID = setInterval(() => {
-        //             this.dy *= breaksMultiplier;
-        //             if (Math.abs(this.dy) < 0.1) {
-        //                 this.dy = 0;
-        //                 clearInterval(intervalID);
-        //             }
-        //         }, Physics.GAME_SPEED());
-        //     }
-        // };
-
         this.stopMovement = (e) => {
-            if (e.keyCode in keyMap) {
-                if (e.keyCode === 83) { //down
-                    keyMap[e.keyCode] = false;
-                }
-                if (e.keyCode === 68) { //right
-                    keyMap[e.keyCode] = false;
-                }
-                if (e.keyCode === 65) { //left
-                    keyMap[e.keyCode] = false;
-                }
-                if (e.keyCode === 87) { //up
-                    keyMap[e.keyCode] = false;
-                }
-
-            }
-            // this.isStopping = true;
+                keyMap[e.keyCode] = false;
         };
 
         this.initController = () => {
@@ -210,8 +166,19 @@ class Player extends GameObject {
             document.addEventListener('keyup', this.stopMovement);
         };
 
-        this.initController();
 
+        this.stopPlayer = () => {
+            for (let i in keyMap) {
+                keyMap[i] = false;
+            }
+        };
+
+        this.disableControllers = () => {
+            document.removeEventListener('keydown', this.applyMovement);
+            this.stopPlayer();
+        };
+
+        this.disableControllers();
     }
 }
 

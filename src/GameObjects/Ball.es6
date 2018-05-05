@@ -44,6 +44,22 @@ class Ball extends GameObject {
                         e.hasBall = true;
                     }
                 }
+                // with target:
+                if ((e instanceof Target) && e.collisionLines) {
+                    if ((this.y - this.radius <= e.collisionLines.top.y0 && this.x - this.radius >= e.collisionLines.top.x0
+                        && this.x + this.radius < e.collisionLines.top.x1) ||
+                        (this.x - this.radius <= e.collisionLines.left.x0 && this.y - this.radius >= e.collisionLines.left.y0
+                        && this.y + this.radius < e.collisionLines.left.y1) ||
+                        (this.y + this.radius >= e.collisionLines.bottom.y0 && this.x - this.radius >= e.collisionLines.bottom.x0
+                        && this.x + this.radius < e.collisionLines.bottom.x1) ||
+                        (this.x + this.radius >= e.collisionLines.right.x0 && this.y + this.radius >= e.collisionLines.right.y0
+                        && this.y + this.radius < e.collisionLines.right.y1)) {
+                        this.dx = 0;
+                        this.dy = 0;
+                    }
+                    return;
+                }
+
                 // with border:
                 if ((e instanceof Border) && e.collisionLines) {
                     let borderTouchMultiplier = 0.85;
@@ -81,23 +97,13 @@ class Ball extends GameObject {
                     }
 
                 }
-                // with target:
-                if ((e instanceof Target) && e.collisionLines) {
-                    if ((this.y - this.radius <= e.collisionLines.top.y0 && this.x - this.radius >= e.collisionLines.top.x0
-                        && this.x + this.radius < e.collisionLines.top.x1) ||
-                        (this.x - this.radius <= e.collisionLines.left.x0 && this.y - this.radius >= e.collisionLines.left.y0
-                        && this.y + this.radius < e.collisionLines.left.y1) ||
-                        (this.y + this.radius >= e.collisionLines.bottom.y0 && this.x - this.radius >= e.collisionLines.bottom.x0
-                        && this.x + this.radius < e.collisionLines.bottom.x1) ||
-                        (this.x + this.radius >= e.collisionLines.right.x0 && this.y + this.radius >= e.collisionLines.right.y0
-                        && this.y + this.radius < e.collisionLines.right.y1)) {
-                        this.dx = 0;
-                        this.dy = 0;
-                    }
 
-                }
             })
         };
+        this.initPosition = () => {
+            this.x = canvas.width/2;
+            this.y = canvas.height/2;
+        }
     }
 }
 

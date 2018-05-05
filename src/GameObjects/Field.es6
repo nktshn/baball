@@ -14,7 +14,7 @@ class Field extends GameObject {
             }
             ctx.fillRect(borders.offset, borders.offset, s.width - borders.offset * 2, s.height - borders.offset * 2);
         };
-        AudioBase.playCrowd();
+        // AudioBase.playCrowd();
     }
 }
 
